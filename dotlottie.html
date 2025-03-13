@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dotLottie-web</title>
+  <style>
+   body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+   }
+
+   .container {
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    background: #fff;
+   }
+
+   .controls {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   }
+
+   button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    background-color: #009a7d;
+    color: white;
+    transition: background-color 0.3s;
+   }
+
+   input[type="range"],
+   input[type="number"],
+   select {
+    width: 300px;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+   }
+
+   .event-log-container {
+    width: 300px;
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+    padding: 20px;
+    margin-left: 20px;
+    background-color: #fafafa;
+   }
+
+   #event-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+   }
+  </style>
+ </head>
+ <body>
+  <div class="container">
+   <h1>dotLottie Web - playback controls example</h1>
+   <div style="display: flex; flex-direction: column">
+    <a href="https://github.com/lottiefiles/dotlottie-web" target="_blank">
+     <canvas style="max-width: 500px; margin: auto"></canvas>
+    </a>
+    <a
+     href="https://lottiefiles.com/animations/celebration-lolo-w318l83FuX"
+     target="_blank"
+     >Lolo Sticker - Celebration Lolo</a
+    >
+   </div>
+
+   <div class="controls">
+    <div>
+     <button id="play-btn">Play</button>
+     <button id="pause-btn">Pause</button>
+     <button id="stop-btn">Stop</button>
+     <button id="loop-btn">Disable Loop</button>
+    </div>
+
+    <div>
+     <button id="freeze-btn">Freeze</button>
+     <button id="unfreeze-btn">UnFreeze</button>
+    </div>
+    <div>
+     <button id="destroy-btn" style="background-color: red">Destroy</button>
+    </div>
+
+    <div class="dropdown-container">
+     <label for="mode-dropdown">Mode:</label>
+     <select id="mode-dropdown">
+      <option value="forward">Forward</option>
+      <option value="reverse">Reverse</option>
+      <option value="bounce">Bounce</option>
+      <option value="bounce-reverse">Bounce Reverse</option>
+     </select>
+    </div>
+
+    <div class="slider-container">
+     <label for="speed-slider">Speed:</label>
+     <input
+      type="range"
+      id="speed-slider"
+      min="0.5"
+      max="5"
+      step="0.1"
+      value="1"
+     />
+    </div>
+
+    <div class="slider-container">
+     <label for="frame-slider">Frame:</label>
+     <input
+      type="range"
+      id="frame-slider"
+      min="0"
+      max="100"
+      step="1"
+      value="0"
+     />
+    </div>
+
+    <div class="segment-container">
+     <label for="segment-start">Segments(Start Frame):</label>
+     <input type="number" id="segment-start" min="0" value="0" />
+     <br />
+     <label for="segment-end">Segments(End Frame):</label>
+     <input type="number" id="segment-end" min="0" value="100" />
+     <br />
+     <button id="set-segment-btn">Set Segments</button>
+    </div>
+
+    <div class="playback-state">
+     Playback State: <span id="playback-state">Stopped</span>
+    </div>
+   </div>
+  </div>
+
+  <div class="event-log-container">
+   <h3>Event Log</h3>
+   <ul id="event-list"></ul>
+  </div>
+
+  <!-- js -->
+  <script type="module">
+   import { DotLottie } from "https://esm.sh/@lottiefiles/dotlottie-web";
+
+   const canvas = document.querySelector("canvas");
+
+   // Initialize DotLottie instance
+   let dotLottie = new DotLottie({
+    autoplay: true,
+    loop: true,
+    canvas,
+    // src: "https://lottie.host/0cbdb3ef-2fa5-4d1d-9e4e-f66c879e010d/D0bRr9d93F.lottie",
+    src: "lotties/sample.lottie",
+   });
+
+   // Control elements
+   const playBtn = document.getElementById("play-btn");
+   const pauseBtn = document.getElementById("pause-btn");
+   const stopBtn = document.getElementById("stop-btn");
+   const loopBtn = document.getElementById("loop-btn");
+   const freezeBtn = document.getElementById("freeze-btn");
+   const unfreezeBtn = document.getElementById("unfreeze-btn");
+   const modeDropdown = document.getElementById("mode-dropdown");
+   const speedSlider = document.getElementById("speed-slider");
+   const frameSlider = document.getElementById("frame-slider");
+   const segmentStartInput = document.getElementById("segment-start");
+   const segmentEndInput = document.getElementById("segment-end");
+   const setSegmentBtn = document.getElementById("set-segment-btn");
+   const playbackStateDisplay = document.getElementById("playback-state");
+   const destroyBtn = document.getElementById("destroy-btn");
+
+   // Event log DOM element
+   const eventLog = document.getElementById("event-list");
+
+   // Function to log events
+   function logEvent(event, extra) {
+    const logItem = document.createElement("li");
+    logItem.textContent = `Event: ${event.type}`;
+    if (extra) {
+     logItem.textContent += ` ,${extra}`;
+    }
+
+    // Insert log item in event log
+    if (eventLog.hasChildNodes()) {
+     eventLog.insertBefore(logItem, eventLog.firstChild);
+    } else {
+     eventLog.appendChild(logItem);
+    }
+   }
+
+   // Event listeners for DotLottie instance
+   dotLottie.addEventListener("load", (event) => {
+    const totalFrames = dotLottie.totalFrames - 1;
+    frameSlider.max = totalFrames;
+    segmentEndInput.max = totalFrames;
+    segmentEndInput.value = totalFrames.toString();
+    logEvent(event);
+    playbackStateDisplay.textContent = "Loaded";
+   });
+
+   dotLottie.addEventListener("loadError", logEvent);
+   dotLottie.addEventListener("play", (event) => {
+    logEvent(event);
+    playbackStateDisplay.textContent = "Playing";
+   });
+   dotLottie.addEventListener("pause", (event) => {
+    logEvent(event);
+    playbackStateDisplay.textContent = "Paused";
+   });
+   dotLottie.addEventListener("stop", (event) => {
+    logEvent(event);
+    playbackStateDisplay.textContent = "Stopped";
+   });
+   dotLottie.addEventListener("loop", (event) => {
+    logEvent(event, `loopCount: ${event.loopCount}`);
+   });
+   dotLottie.addEventListener("complete", (event) => {
+    logEvent(event);
+    playbackStateDisplay.textContent = "Stopped";
+   });
+   dotLottie.addEventListener("frame", (event) => {
+    frameSlider.value = event.currentFrame;
+    // logEvent(event);
+   });
+   dotLottie.addEventListener("freeze", logEvent);
+   dotLottie.addEventListener("unfreeze", logEvent);
+
+   // Event listeners for control elements
+   playBtn.addEventListener("click", () => dotLottie.play());
+   pauseBtn.addEventListener("click", () => dotLottie.pause());
+   stopBtn.addEventListener("click", () => dotLottie.stop());
+   loopBtn.addEventListener("click", () => {
+    const currentLoopState = dotLottie.loop;
+    dotLottie.setLoop(!currentLoopState);
+    loopBtn.textContent = currentLoopState ? "Enable Loop" : "Disable Loop";
+   });
+   freezeBtn.addEventListener("click", () => dotLottie.freeze());
+   unfreezeBtn.addEventListener("click", () => dotLottie.unfreeze());
+   modeDropdown.addEventListener("change", (e) =>
+    dotLottie.setMode(e.target.value)
+   );
+   speedSlider.addEventListener("input", (e) =>
+    dotLottie.setSpeed(parseFloat(e.target.value))
+   );
+   frameSlider.addEventListener("input", (e) =>
+    dotLottie.setFrame(parseFloat(e.target.value))
+   );
+   setSegmentBtn.addEventListener("click", () => {
+    const startFrame = parseInt(segmentStartInput.value, 10);
+    const endFrame = parseInt(segmentEndInput.value, 10);
+    dotLottie.setSegment(startFrame, endFrame);
+   });
+   destroyBtn.addEventListener("click", () => {
+    canvas.remove();
+    dotLottie.destroy();
+   });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,58 @@
+[
+ {
+  "id": 1,
+  "youtubeId": "",
+  "videoSrc": "character.mp4",
+  "title": "춤추는 3D 캐릭터",
+  "desc": "3D 캐릭터가 이상한 스텝으로 춤을 춥니다.",
+  "createdAt": "2025. 02. 06"
+ },
+ {
+  "id": 2,
+  "youtubeId": "",
+  "videoSrc": "icecream.mp4",
+  "title": "아이스크림",
+  "desc": "두 번째 영상 설명입니다.",
+  "createdAt": "2025. 02. 06"
+ },
+ {
+  "id": 3,
+  "youtubeId": "",
+  "videoSrc": "snow.mp4",
+  "title": "눈 내리는 집 앞 마당",
+  "desc": "세 번째 영상 설명입니다.",
+  "createdAt": "2025. 02. 06"
+ },
+ {
+  "id": 4,
+  "youtubeId": "",
+  "videoSrc": "summer.mp4",
+  "title": "여름 바닷가",
+  "desc": "네 번째 영상 설명입니다.",
+  "createdAt": "2025. 02. 06"
+ },
+ {
+  "id": 5,
+  "youtubeId": "",
+  "videoSrc": "summer.mp4",
+  "title": "다섯 번째 영상",
+  "desc": "다섯 번째 영상 설명입니다.",
+  "createdAt": "2025. 02. 7"
+ },
+ {
+  "id": 6,
+  "youtubeId": "",
+  "videoSrc": "summer.mp4",
+  "title": "여섯 번째 영상",
+  "desc": "여섯 번째 영상 설명입니다.",
+  "createdAt": "2025. 02. 7"
+ },
+ {
+  "id": 7,
+  "youtubeId": "OrsRuUjquZY",
+  "videoSrc": "",
+  "title": "일곱 번째 영상",
+  "desc": "일곱 번째 영상 설명입니다.",
+  "createdAt": "2025. 02. 7"
+ }
+]

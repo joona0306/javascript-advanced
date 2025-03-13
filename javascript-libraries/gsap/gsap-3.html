@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>배경 이미지 고정 해서 차례대로 올라오기</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
+
+  <style>
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+   }
+   html,
+   body {
+    font-family: "arial", sans-serif;
+    color: #fff;
+    background-color: #111;
+   }
+   .wrap {
+    overflow: hidden;
+   }
+   .item {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   }
+   .item-num {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    font-size: 3vw;
+    line-height: 1;
+    z-index: 10;
+   }
+   .item-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: url("https://picsum.photos/2000/1000") no-repeat center;
+    background-size: cover;
+   }
+   .item-img::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+   }
+   .item-title {
+    font-size: 5vw;
+    text-transform: uppercase;
+    display: block;
+    z-index: 100;
+   }
+  </style>
+ </head>
+ <body>
+  <div class="wrap">
+   <section id="section1" class="item">
+    <h2 class="item-title">section-1</h2>
+    <span class="item-num">01</span>
+    <div class="item-img"></div>
+   </section>
+   <section id="section2" class="item">
+    <h2 class="item-title">section-2</h2>
+    <span class="item-num">02</span>
+    <div class="item-img"></div>
+   </section>
+   <section id="section3" class="item">
+    <h2 class="item-title">section-3</h2>
+    <span class="item-num">03</span>
+    <div class="item-img"></div>
+   </section>
+   <section id="section4" class="item">
+    <h2 class="item-title">section-4</h2>
+    <span class="item-num">04</span>
+    <div class="item-img"></div>
+   </section>
+   <section id="section5" class="item">
+    <h2 class="item-title">section-5</h2>
+    <span class="item-num">05</span>
+    <div class="item-img"></div>
+   </section>
+  </div>
+
+  <!-- js -->
+  <script>
+   // 1. 하나의 섹션 고정시키기
+   //    const section3 = document.querySelector("#section3");
+
+   //    ScrollTrigger.create({
+   //     trigger: section3,
+   //     start: "top top",
+   //     pin: true,
+   //     markers: true,
+   //     pinSpacing: false,
+   //    });
+
+   // 2. 여러개 섹션 고정시키기
+   const sections = document.querySelectorAll(".item");
+
+   sections.forEach((item) => {
+    ScrollTrigger.create({
+     trigger: item,
+     start: "top top",
+     pin: true,
+     markers: true,
+     pinSpacing: false,
+    });
+   });
+  </script>
+ </body>
+</html>
