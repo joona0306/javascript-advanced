@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+ <head>
+  <meta charset="utf-8" />
+  <title>스와이퍼 샘플</title>
+  <meta
+   name="viewport"
+   content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"
+  />
+  <!-- Link Swiper's CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Demo styles -->
+  <style>
+   html,
+   body {
+    position: relative;
+    height: 100%;
+   }
+
+   body {
+    background: #eee;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+   }
+
+   .swiper {
+    width: 1200px;
+    height: 600px;
+   }
+
+   .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #333;
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   }
+
+   .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+   }
+   .mySwiper .swiper-pagination-bullet {
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 2px;
+    opacity: 0.4;
+    /* transition: height 1s, opacity 1s; */
+    transition: width 1s, opacity 1s;
+   }
+   .mySwiper .swiper-pagination-bullet-active {
+    /* height: 48px; */
+    width: 48px;
+    opacity: 1;
+   }
+   .swiper-button-next {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    /* background-color: #fff; */
+    border: 2px solid #fff;
+   }
+   .swiper-button-next::after {
+    /* font-size: 58px; */
+    color: #fff;
+   }
+  </style>
+ </head>
+
+ <body>
+  <!-- Swiper -->
+  <!-- mySwiper 클래스 명만 바꿀 수 있다!! 다른건 바꾸지말자!! -->
+  <div class="swiper mySwiper">
+   <div class="swiper-wrapper">
+    <div class="swiper-slide">Slide 1</div>
+    <div class="swiper-slide">Slide 2</div>
+    <div class="swiper-slide">Slide 3</div>
+    <div class="swiper-slide">Slide 4</div>
+    <div class="swiper-slide">Slide 5</div>
+    <div class="swiper-slide">Slide 6</div>
+    <div class="swiper-slide">Slide 7</div>
+    <div class="swiper-slide">Slide 8</div>
+    <div class="swiper-slide">Slide 9</div>
+   </div>
+   <div class="swiper-pagination"></div>
+   <div class="swiper-button-next"></div>
+   <div class="swiper-button-prev"></div>
+  </div>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Initialize Swiper -->
+  <script>
+   const swiper = new Swiper(".mySwiper", {
+    speed: 1000,
+    loop: true,
+    autoplay: {
+     delay: 2500,
+     disableOnInteraction: false,
+    },
+    pagination: {
+     el: ".swiper-pagination",
+     clickable: true,
+    },
+    navigation: {
+     nextEl: ".swiper-button-next",
+     prevEl: ".swiper-button-prev",
+    },
+   });
+
+   // swiper mouseover event
+   const mySwiper = document.querySelector(".mySwiper");
+   mySwiper.addEventListener("mouseover", () => {
+    swiper.autoplay.stop();
+   });
+   mySwiper.addEventListener("mouseout", () => {
+    swiper.autoplay.start();
+   });
+  </script>
+ </body>
+</html>
